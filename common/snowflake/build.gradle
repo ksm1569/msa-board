@@ -1,0 +1,15 @@
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+        events "passed", "skipped", "failed"
+    }
+}
