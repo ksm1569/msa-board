@@ -2,12 +2,10 @@ package smsoft.board.article.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestClient;
-import smsoft.board.article.entity.Article;
-import smsoft.board.article.service.request.ArticleCreateRequest;
+import smsoft.board.article.service.response.ArticlePageResponse;
 import smsoft.board.article.service.response.ArticleResponse;
 
 public class ArticleApiTest {
@@ -63,6 +61,19 @@ public class ArticleApiTest {
                 .body(request)
                 .retrieve()
                 .body(ArticleResponse.class);
+    }
+
+    @Test
+    void readAllTest() {
+        ArticlePageResponse response = restClient.get()
+                .uri("/v1/articles?boardId=1&page=50000&pageSize=30")
+                .retrieve()
+                .body(ArticlePageResponse.class);
+
+        System.out.println("response.getArticlesCount() = " + response.getArticleCount());
+        for (ArticleResponse article : response.getArticles()) {
+            System.out.println("article = " + article.getArticleId());
+        }
     }
 
     @AllArgsConstructor
