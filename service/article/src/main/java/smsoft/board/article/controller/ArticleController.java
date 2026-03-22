@@ -1,6 +1,9 @@
 package smsoft.board.article.controller;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import smsoft.board.article.service.ArticleService;
 import smsoft.board.article.service.request.ArticleCreateRequest;
@@ -8,6 +11,9 @@ import smsoft.board.article.service.request.ArticleUpdateRequest;
 import smsoft.board.article.service.response.ArticlePageResponse;
 import smsoft.board.article.service.response.ArticleResponse;
 
+import java.util.List;
+
+@Validated
 @RequiredArgsConstructor
 @RestController
 public class ArticleController {
@@ -42,4 +48,14 @@ public class ArticleController {
     public void delete(@PathVariable("articleId") Long articleId){
         articleService.delete(articleId);
     }
+
+    @GetMapping("/v1/articles/infinite-scroll")
+    public List<ArticleResponse> readInfiniteScroll(
+            @RequestParam("boardId") Long boardId,
+            @RequestParam("pageSize") @Min(1) @Max(50) Long pageSize,
+            @RequestParam(value = "lastArticleId", required = false) Long lastArticleId)
+    {
+        return articleService.readAllInfiniteScroll(boardId, pageSize, lastArticleId);
+    }
+
 }
